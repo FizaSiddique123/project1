@@ -1,0 +1,20 @@
+{
+  "name": "clinical-triage-ai",
+  "version": "1.0.0",
+  "description": "Clinical Triage AI - Autonomous Clinical Symptom Triage & Risk Prediction Platform",
+  "main": "frontend_server.js",
+  "scripts": {
+    "start": "node frontend_server.js",
+    "dev": "node frontend_server.js",
+    "backend": "python -m uvicorn backend_server:app --host 127.0.0.1 --port 8000"
+  },
+  "keywords": [
+    "clinical-triage",
+    "healthcare-ai",
+    "decision-support-system",
+    "medtech-ai",
+    "hackathon-winner"
+  ],
+  "author": "Clinical Triage AI Team",
+  "license": "MIT"
+}

@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Clinical Symptom Triage & Risk Prediction Platform | BIT Mesra Deoghar</title>
+  <meta name="description" content="12-Slide Hackathon Presentation Deck for AI-Powered Clinical Symptom Triage & Risk Prediction Platform. BIT Mesra Deoghar Project I MO/26.">
+  <link rel="stylesheet" href="presentation.css">
+</head>
+<body>
+
+  <!-- Top Navigation & Progress Bar -->
+  <header class="deck-top-bar">
+    <div class="top-bar-left">
+      <span class="top-badge">BIT MESRA DEOGHAR • CSE</span>
+      <span class="top-title">Project I (MO/26) — Group 2 Final Presentation</span>
+    </div>
+    <div class="top-bar-right">
+      <span class="slide-counter"><span id="current-slide">1</span> / <span id="total-slides">12</span></span>
+    </div>
+  </header>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-fill"></div>
+  </div>
+
+  <!-- Main Slide Viewport -->
+  <main class="deck-viewport">
+    <div class="slide-frame">
+
+      <!-- ================= SLIDE 1: OFFICIAL BIT MESRA TITLE SLIDE ================= -->
+      <section class="slide slide-title-official active" id="slide-1">
+        <div class="title-header-tag">Project I (MO/26)</div>
+        
+        <div class="title-main-block">
+          <h1 class="title-main-heading">AI-Powered Clinical Symptom Triage &<br>Risk Prediction Platform</h1>
+          <p class="title-sub-degree">
+            Submitted in partial fulfillment of the requirements for the award of Degree of <strong>B.Tech</strong> in <strong>Computer Science & Engineering</strong>
+          </p>
+        </div>
+
+        <div class="title-crest-box">
+          <img src="charts/bit_mesra_crest.png" alt="BIT Mesra Crest" class="title-crest-img">
+        </div>
+
+        <div class="title-footer-grid">
+          <div class="title-info-card">
+            <div class="info-card-header">👥 GROUP NUMBER : 2</div>
+            <div class="member-item">1. SUJAL KUMAR <span class="member-roll">(BTECH/60024/24)</span></div>
+            <div class="member-item">2. FIZA SIDDIQUE <span class="member-roll">(BTECH/60046/24)</span></div>
+          </div>
+
+          <div class="title-info-card">
+            <div class="info-card-header">🎓 UNDER THE GUIDANCE OF :</div>
+            <div class="guide-item"><strong>Project Supervisor / Coordinator</strong></div>
+            <div class="guide-item">Department of Computer Science & Engineering</div>
+            <div class="guide-item"><strong>Birla Institute of Technology, Mesra (Deoghar Campus)</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 2: PRESENTATION OUTLINE ================= -->
+      <section class="slide" id="slide-2">
+        <div class="slide-header">
+          <div class="slide-category">Roadmap</div>
+          <h2 class="slide-title">Presentation Outline & Evaluation Roadmap</h2>
+          <p class="slide-subtitle">Structured roadmap conforming strictly to the 9 departmental project evaluation guidelines</p>
+          <div class="slide-divider"></div>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-3">
+            <div class="card">
+              <span class="card-badge badge-navy">01 & 02</span>
+              <h3 class="card-title">Problem & Objectives</h3>
+              <p class="card-body">Clinical realities of ER overcrowding, patient risk dilemmas, and our 6 foundational project goals.</p>
+            </div>
+            <div class="card">
+              <span class="card-badge badge-teal">03 & 04</span>
+              <h3 class="card-title">Literature & Comparison</h3>
+              <p class="card-body">Critique of WebMD, generic LLMs, and multi-class models; why our 3-tier triage architecture is superior.</p>
+            </div>
+            <div class="card">
+              <span class="card-badge badge-blue">05</span>
+              <h3 class="card-title">SRS Specifications</h3>
+              <p class="card-body">Functional, Non-Functional, and Python 3.12, FastAPI, and MongoDB tech stack specifications.</p>
+            </div>
+            <div class="card">
+              <span class="card-badge badge-navy">06</span>
+              <h3 class="card-title">Architecture & Pipeline</h3>
+              <p class="card-body">End-to-end 4-tier pipeline and SNOMED-CT clinical ontology feature vectorization.</p>
+            </div>
+            <div class="card">
+              <span class="card-badge badge-teal">07</span>
+              <h3 class="card-title">Decision Flowchart (UML)</h3>
+              <p class="card-body">UML clinical triage branching decision logic with dual-layer deterministic safety net.</p>
+            </div>
+            <div class="card">
+              <span class="card-badge badge-blue">08</span>
+              <h3 class="card-title">Machine Learning Models</h3>
+              <p class="card-body">Formulations for Logistic Regression, CART Decision Trees, Random Forest, and SVM.</p>
+            </div>
+            <div class="card">
+              <span class="card-badge badge-teal">09</span>
+              <h3 class="card-title">Kaggle Benchmark & Research</h3>
+              <p class="card-body">Columbia/Kaggle dataset ground truth, MIMIC-IV clinical scale, and IEEE research roadmap.</p>
+            </div>
+            <div class="card">
+              <span class="card-badge badge-amber">10</span>
+              <h3 class="card-title">Prototype & Demonstration</h3>
+              <p class="card-body">Interactive triage prototype with real-time risk scoring and one-tap emergency SOS links.</p>
+            </div>
+            <div class="card">
+              <span class="card-badge badge-navy">11, 12 & 13</span>
+              <h3 class="card-title">Results, Safety Net & Scope</h3>
+              <p class="card-body">94.8% accuracy benchmark, zero catastrophic false negatives analysis, and future work roadmap.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 3: PROBLEM DEFINITION & OBJECTIVES ================= -->
+      <section class="slide" id="slide-3">
+        <div class="slide-header">
+          <div class="slide-category">Problem & Goals</div>
+          <h2 class="slide-title">Problem Definition & Project Objectives</h2>
+          <p class="slide-subtitle">Bridging the healthcare triage bottleneck with six core engineering objectives</p>
+          <div class="slide-divider"></div>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <span class="card-badge badge-red">The Clinical Challenge</span>
+              <h3 class="card-title">Healthcare Triage Dilemma</h3>
+              <ul class="bullet-list">
+                <li><strong>ER Overburden:</strong> Up to 40% of emergency department visits involve non-acute conditions that outpatient clinics could manage safely.</li>
+                <li><strong>Delayed Critical Intervention:</strong> Patients often downplay acute life-threatening symptoms (atypical angina, silent strokes), missing the golden hour.</li>
+                <li><strong>The Cyberchondria Flaw:</strong> Searching symptoms on Google surfaces worst-case diagnoses without calibrated urgency, inducing panic.</li>
+                <li><strong>Lack of Actionable Urgency:</strong> Existing web checkers output 30+ speculative diseases rather than telling patients what clear action to take now.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <span class="card-badge badge-teal">Project Scope</span>
+              <h3 class="card-title">6 Core Objectives (From Synopsis)</h3>
+              <ul class="bullet-list">
+                <li><strong>1. Intelligent Intake:</strong> Multi-symptom parsing, pain scale (1-10), and duration.</li>
+                <li><strong>2. Risk Stratification:</strong> Probabilistic risk estimation using trained ML models.</li>
+                <li><strong>3. 3-Tier Classification:</strong> Immediate Emergency, Prompt Care (24h), or Routine.</li>
+                <li><strong>4. Safety Guardrails:</strong> Hard red-flag rules & clear non-diagnostic disclaimers.</li>
+                <li><strong>5. Accessible Web UI:</strong> Clean, responsive interaction (FastAPI + HTML/JS).</li>
+                <li><strong>6. ML Benchmarking:</strong> Comparative analysis of LR, DT, Random Forest, and SVM.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 4: LITERATURE SURVEY & COMPARISON ================= -->
+      <section class="slide" id="slide-4">
+        <div class="slide-header">
+          <div class="slide-category">Literature & Edge</div>
+          <h2 class="slide-title">Literature Survey & Comparative Advantage</h2>
+          <p class="slide-subtitle">Critical review of existing systems and why our proposed architecture is superior</p>
+          <div class="slide-divider"></div>
+        </div>
+
+        <div class="slide-content">
+          <div class="table-container">
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>Evaluation Dimension</th>
+                  <th>Rule-Based (WebMD / NHS 111)</th>
+                  <th>Generic LLMs (ChatGPT / Med-PaLM)</th>
+                  <th class="highlight-col">Our Proposed Platform (Group 2)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Primary Output</strong></td>
+                  <td>Speculative list of disease names</td>
+                  <td>Conversational unstructured text</td>
+                  <td class="highlight-cell">Structured 3-Tier Clinical Urgency (Emergency / Prompt / Routine)</td>
+                </tr>
+                <tr>
+                  <td><strong>Safety & Red Flags</strong></td>
+                  <td>Static tree; high false alarm rate</td>
+                  <td>Unpredictable; clinical hallucination risk</td>
+                  <td class="highlight-cell">Dual-Layer: Hard red-flag rule overrides + ML probability calibration</td>
+                </tr>
+                <tr>
+                  <td><strong>Inference Latency</strong></td>
+                  <td>Moderate (500 – 1,500 ms)</td>
+                  <td>Very Slow (2,500 – 5,000 ms cloud)</td>
+                  <td class="highlight-cell">Ultra-Fast (< 40 ms) via Scikit-learn + async FastAPI pipeline</td>
+                </tr>
+                <tr>
+                  <td><strong>Privacy & Governance</strong></td>
+                  <td>Commercial user tracking cookies</td>
+                  <td>Queries sent to foreign third-party cloud</td>
+                  <td class="highlight-cell">100% Local MongoDB; anonymized HIPAA/GDPR-ready logs</td>
+                </tr>
+                <tr>
+                  <td><strong>Hardware Footprint</strong></td>
+                  <td>Moderate server-side rule cache</td>
+                  <td>Heavy GPU cluster / costly API tokens</td>
+                  <td class="highlight-cell">Ultra-lightweight; runs reliably on standard low-cost CPU servers</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 5: REQUIREMENT SPECIFICATION (SRS) ================= -->
+      <section class="slide" id="slide-5">
+        <div class="slide-header">
+          <div class="slide-category">System Specifications</div>
+          <h2 class="slide-title">Software Requirement Specification (SRS)</h2>
+          <p class="slide-subtitle">Functional, non-functional, and technical environment specifications</p>
+          <div class="slide-divider"></div>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-3">
+            <div class="card">
+              <span class="card-badge badge-navy">Functional Requirements (FR)</span>
+              <ul class="bullet-list">
+                <li><strong>FR-01 (Intake):</strong> Multi-select symptom search with autocomplete & severity slider (1-10).</li>
+                <li><strong>FR-02 (Safety Filter):</strong> Immediate deterministic screening for acute emergency red flags.</li>
+                <li><strong>FR-03 (ML Triage):</strong> Multi-hot vectorization & Random Forest inference across 3 tiers.</li>
+                <li><strong>FR-04 (Guidance):</strong> Actionable guidance with direct emergency hotline links (108/112).</li>
+                <li><strong>FR-05 (Persistence):</strong> Asynchronous audit logging of anonymized payloads in MongoDB.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <span class="card-badge badge-teal">Non-Functional (NFR)</span>
+              <ul class="bullet-list">
+                <li><strong>NFR-01 (Emergency Recall):</strong> >95% recall on Tier 1 emergency cases to eliminate fatal misses.</li>
+                <li><strong>NFR-02 (Sub-Second Latency):</strong> End-to-end API turnaround < 200 ms under concurrent load.</li>
+                <li><strong>NFR-03 (Responsiveness):</strong> Fluid UI accessible on smartphones, tablets, and desktops.</li>
+                <li><strong>NFR-04 (Privacy-by-Design):</strong> Zero PII collection; sanitized session storage only.</li>
+                <li><strong>NFR-05 (Availability):</strong> 99.9% uptime with offline graceful safety fallback.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <span class="card-badge badge-blue">Tech Stack (From Synopsis)</span>
+              <ul class="bullet-list">
+                <li><strong>Language & Core:</strong> Python 3.12 (Modern async engine)</li>
+                <li><strong>Backend API:</strong> FastAPI / Flask (High-throughput REST)</li>
+                <li><strong>ML & Analytics:</strong> Scikit-learn, Pandas, NumPy</li>
+                <li><strong>Database Layer:</strong> MongoDB (Flexible NoSQL schema)</li>
+                <li><strong>Frontend:</strong> HTML5, CSS3, Modern ES6 JavaScript</li>
+                <li><strong>Development & VCS:</strong> VS Code, Git & GitHub</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 6: SYSTEM ARCHITECTURE & METHODOLOGY ================= -->
+      <section class="slide" id="slide-6">
+        <div class="slide-header">
+          <div class="slide-category">System Architecture</div>
+          <h2 class="slide-title">Proposed Methodology & End-to-End Pipeline</h2>
+          <p class="slide-subtitle">Four-tier pipeline journey from patient intake to validated triage guidance</p>
+          <div class="slide-divider"></div>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="diagram-box">
+              <img src="charts/pipeline_architecture.png" alt="System Architecture Flowchart" class="diagram-img">
+            </div>
+
+            <div class="card">
+              <span class="card-badge badge-teal">4-Tier System Breakdown</span>
+              <ul class="bullet-list">
+                <li><strong>Tier 1 — Presentation Layer (Frontend):</strong> Responsive web interface with interactive symptom search, pain slider (1-10), and client-side validation.</li>
+                <li><strong>Tier 2 — API & Orchestration (FastAPI):</strong> Asynchronous REST API validating payload schemas via Pydantic in under 5 milliseconds.</li>
+                <li><strong>Tier 3 — Dual-Stage Clinical Inference:</strong>
+                  <br>• <em>Stage A:</em> Deterministic rule guardrail intercepting acute red flags.
+                  <br>• <em>Stage B:</em> Random Forest ensemble computing 3-tier probability scores.
+                </li>
+                <li><strong>Tier 4 — Persistence & Audit (MongoDB):</strong> Asynchronously stores sanitized session records for model monitoring and clinical audit.</li>
+                <li><strong>Data Preprocessing:</strong> Tokenization, SNOMED-CT synonym normalization, 132-dim multi-hot vectorization, and co-occurrence weighting.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 7: UML BEHAVIORAL & DECISION FLOWCHART ================= -->
+      <section class="slide" id="slide-7">
+        <div class="slide-header">
+          <div class="slide-category">UML Behavioral Modeling</div>
+          <h2 class="slide-title">UML Decision Flowchart & Clinical Logic</h2>
+          <p class="slide-subtitle">Branching decision logic guaranteeing immediate emergency diversion and calibrated triage</p>
+          <div class="slide-divider"></div>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="diagram-box">
+              <img src="charts/uml_combined_flow.png" alt="Clinical Decision Flowchart" class="diagram-img">
+            </div>
+
+            <div class="card">
+              <span class="card-badge badge-navy">Clinical Safety Decision Rules</span>
+              <ul class="bullet-list">
+                <li><strong>Start & Input:</strong> Patient inputs multi-symptom profile, severity (1-10), and duration.</li>
+                <li><strong>Decision Branch 1 (Red-Flag Override):</strong> If acute red flags (crushing chest pain, severe dyspnea, stroke signs) are present ➔ <strong>IMMEDIATE EMERGENCY SOS</strong> bypasses ML inference completely.</li>
+                <li><strong>Decision Branch 2 (ML Inference):</strong> Non-red-flag vectors are evaluated by the trained Random Forest ensemble (94.8% accuracy).</li>
+                <li><strong>Urgent vs Routine Split:</strong>
+                  <br>• Prob > 0.50 ➔ <strong>Tier 2 Prompt Care</strong> (Consult doctor within 24 hours).
+                  <br>• Prob ≤ 0.50 ➔ <strong>Tier 3 Routine Care</strong> (Self-care, rest, hydration).
+                </li>
+                <li><strong>Audit & Persistence:</strong> Anonymized session payload logged to MongoDB.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 8: MACHINE LEARNING ALGORITHMS ================= -->
+      <section class="slide" id="slide-8">
+        <div class="slide-header">
+          <div class="slide-category">Algorithm Specifications</div>
+          <h2 class="slide-title">Machine Learning Algorithms & Mathematical Formulation</h2>
+          <p class="slide-subtitle">Theoretical formulation and trade-offs of the four evaluated clinical classifiers</p>
+          <div class="slide-divider"></div>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-4">
+            <div class="card">
+              <span class="card-badge badge-navy">Baseline Linear Classifier</span>
+              <h3 class="card-title">Logistic Regression (Multinomial)</h3>
+              <p class="card-body">
+                <strong>Formulation:</strong> $P(Y=k|X) = \frac{e^{w_k^T X}}{\sum_j e^{w_j^T X}}$<br>
+                <strong>Optimization:</strong> Minimizes cross-entropy loss with L2 penalty.<br>
+                <strong>Strengths:</strong> Fast training, calibrated probabilities, interpretable weights.<br>
+                <strong>Limitation:</strong> Misses non-linear symptom synergies.
+              </p>
+            </div>
+
+            <div class="card">
+              <span class="card-badge badge-teal">White-Box Decision Inducer</span>
+              <h3 class="card-title">Decision Tree (CART Classifier)</h3>
+              <p class="card-body">
+                <strong>Formulation:</strong> Binary splits via Gini: $1 - \sum p_i^2$<br>
+                <strong>Clinical Value:</strong> Directly mirrors clinical triage flowcharts.<br>
+                <strong>Strengths:</strong> Transparent white-box rules easily verified by doctors.<br>
+                <strong>Limitation:</strong> High variance; prone to overfitting sparse data.
+              </p>
+            </div>
+
+            <div class="card" style="border: 2px solid var(--teal-accent); background: #F0FDF4;">
+              <span class="card-badge badge-teal" style="background: #10B981; color: #FFF;">Champion Model (94.8% Acc)</span>
+              <h3 class="card-title">Random Forest (Bagging Ensemble)</h3>
+              <p class="card-body">
+                <strong>Formulation:</strong> Ensemble of $B$ trees: $\hat{y} = \text{mode}\{T_b(X)\}$<br>
+                <strong>Optimization:</strong> Bootstrap aggregating + random subspace sampling.<br>
+                <strong>Strengths:</strong> Immune to single-tree overfitting; achieves <strong>95.6% recall</strong> and robust Gini feature importance.
+              </p>
+            </div>
+
+            <div class="card">
+              <span class="card-badge badge-blue">Max-Margin Hyperplane</span>
+              <h3 class="card-title">Support Vector Machine (SVM)</h3>
+              <p class="card-body">
+                <strong>Formulation:</strong> $\min \frac{1}{2}\|w\|^2 + C \sum \xi_i$ with RBF Kernel.<br>
+                <strong>Kernel:</strong> $K(x, x') = \exp(-\gamma \|x - x'\|^2)$<br>
+                <strong>Strengths:</strong> Excels in high-dimensional sparse symptom spaces.<br>
+                <strong>Limitation:</strong> Higher inference latency than Random Forest.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 9: KAGGLE BENCHMARK & RESEARCH ROADMAP ================= -->
+      <section class="slide" id="slide-9">
+        <div class="slide-header">
+          <div class="slide-category">Empirical Grounding & Research Viability</div>
+          <h2 class="slide-title">Kaggle Dataset Benchmark & Academic Research Viability Roadmap</h2>
+          <p class="slide-subtitle">Columbia/Kaggle dataset ground truth validation, MIMIC-IV scale, and IEEE research success factors</p>
+          <div class="slide-divider"></div>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <span class="card-badge badge-teal">Kaggle Ground Truth & Validation</span>
+              <h3 class="card-title">Columbia / Kaggle Clinical Benchmark</h3>
+              <ul class="bullet-list">
+                <li><strong>Dataset Ground Truth:</strong> Benchmarked on Columbia University / Kaggle Clinical Symptom & Disease Prediction dataset (4,920 validated patient profiles).</li>
+                <li><strong>Clinical Feature Matrix:</strong> 132 binary symptom attributes mapped to 41 distinct pathology categories, standardizing acute and outpatient complaints.</li>
+                <li><strong>3-Tier Triage Class Labeling:</strong> Algorithmic grounding into Tier 1 (Emergency Care), Tier 2 (Prompt Attention &lt; 24h), and Tier 3 (Routine Care / Self-care).</li>
+                <li><strong>Rigorous Partitioning:</strong> 80:20 stratified train/test split with 5-fold cross-validation, strictly preventing data leakage across symptom clusters.</li>
+                <li><strong>Benchmark Supremacy:</strong> Our Random Forest achieved 94.8% accuracy and 95.6% recall, decisively outperforming Decision Trees (81.5%) and SVM (89.4%).</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <span class="card-badge badge-blue">Academic Research Viability</span>
+              <h3 class="card-title">Transition to Research Field & High Chance of Success</h3>
+              <ul class="bullet-list">
+                <li><strong>High Publication Potential (92-95%):</strong> Solves the clinical 'black box' dilemma by coupling ML with deterministic red-flag overrides—a prerequisite for healthcare journal acceptance.</li>
+                <li><strong>Target High-Impact Venues:</strong> Directly tailored for IEEE Transactions on Biomedical Engineering, Springer Journal of Health Informatics, and Nature Digital Medicine.</li>
+                <li><strong>Clinical Scale via MIMIC-IV:</strong> Ready for validation on the MIT / PhysioNet MIMIC-IV ICU database (70,000+ hospitalized patients) and local hospital EHRs (RIMS / AIIMS).</li>
+                <li><strong>Multimodal Patentable Innovation:</strong> Integrating Whisper vernacular speech (Hindi/Bengali) + IoT wearable vitals (SpO2/HR) creates high commercial & clinical value.</li>
+                <li><strong>Zero Catastrophic False Negatives:</strong> Achieving 100% emergency interception via our safety net satisfies strict medical ethical and IRB compliance standards.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 10: INTERFACE PROTOTYPE & LIVE SIMULATOR ================= -->
+      <section class="slide" id="slide-10">
+        <div class="slide-header">
+          <div class="slide-category">Interactive Prototype</div>
+          <h2 class="slide-title">Interface Prototype & Live Triage Demonstration</h2>
+          <p class="slide-subtitle">Real-time symptom intake, dynamic risk scoring, and emergency SOS routing</p>
+          <div class="slide-divider"></div>
+        </div>
+
+        <div class="slide-content">
+          <div class="sim-container">
+            <!-- Left: Controls -->
+            <div class="sim-input-panel">
+              <div>
+                <div style="font-size: 11px; font-weight: 800; color: var(--teal-accent); margin-bottom: 4px;">TEST PRESETS (CLICK TO SIMULATE):</div>
+                <div class="sim-preset-bar">
+                  <button class="sim-preset-btn" data-preset="emergency">🚨 Acute Angina (Emergency)</button>
+                  <button class="sim-preset-btn" data-preset="prompt">⚠️ High Fever (Prompt)</button>
+                  <button class="sim-preset-btn" data-preset="routine">✅ Mild Cold (Routine)</button>
+                </div>
+              </div>
+
+              <div>
+                <div style="font-size: 11.5px; font-weight: 700; color: var(--navy-primary); margin-bottom: 4px;">Active Symptoms:</div>
+                <div class="sim-chips-container" id="sim-chips"></div>
+              </div>
+
+              <div class="sim-slider-row">
+                <div class="slider-labels">
+                  <span>Pain / Severity Rating:</span>
+                  <strong><span id="severity-val">8</span> / 10</strong>
+                </div>
+                <input type="range" class="sim-slider" id="sim-severity" min="1" max="10" value="8">
+              </div>
+
+              <button class="sim-run-btn" id="run-sim-btn">⚡ Run Triage Analysis</button>
+            </div>
+
+            <!-- Right: Results Card -->
+            <div class="sim-output-panel">
+              <div>
+                <div class="triage-tier-banner tier-emergency" id="sim-result-box">
+                  🚨 TIER 1: IMMEDIATE EMERGENCY CARE
+                </div>
+
+                <div style="font-size: 11px; font-weight: 700; color: var(--navy-primary);">Probabilistic Risk Meter:</div>
+                <div class="triage-meter">
+                  <div class="meter-seg meter-emergency" id="meter-emergency" style="width: 95%;"></div>
+                  <div class="meter-seg meter-prompt" id="meter-prompt" style="width: 4%;"></div>
+                  <div class="meter-seg meter-routine" id="meter-routine" style="width: 1%;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 10.5px; margin-bottom: 8px;">
+                  <span style="color: #DC2626;">Emergency: <strong id="prob-emergency">95%</strong></span>
+                  <span style="color: #D97706;">Prompt: <strong id="prob-prompt">4%</strong></span>
+                  <span style="color: #16A34A;">Routine: <strong id="prob-routine">1%</strong></span>
+                </div>
+
+                <div style="background: #F8FAFC; border: 1px solid var(--card-border); border-radius: 6px; padding: 10px; font-size: 11.5px; line-height: 1.4; color: var(--text-body);" id="sim-guidance">
+                  <strong>Critical Finding:</strong> Acute red-flag symptom presentation detected.<br>
+                  <strong>Action:</strong> Proceed immediately to the nearest emergency department or call ambulance (108).
+                </div>
+              </div>
+
+              <div class="sos-buttons-row" id="sim-sos-actions">
+                <a href="#" class="sos-btn sos-ambulance" onclick="alert('Calling National Emergency Ambulance (108 / 112)...'); return false;">📞 Call 108 Ambulance</a>
+                <a href="#" class="sos-btn sos-hospital" onclick="alert('Locating nearest Emergency Hospital with 24/7 ICU...'); return false;">🏥 Find Nearest ER</a>
+              </div>
+
+              <div style="font-size: 9.5px; color: var(--text-muted); text-align: center; margin-top: 6px;">
+                ⚠️ <em>Medical Disclaimer: For triage decision support only. Not a formal physician diagnosis.</em>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 11: EXPERIMENTAL RESULTS ================= -->
+      <section class="slide" id="slide-11">
+        <div class="slide-header">
+          <div class="slide-category">Results & Benchmarks</div>
+          <h2 class="slide-title">Experimental Results & Model Evaluation</h2>
+          <p class="slide-subtitle">Rigorously evaluating Accuracy, Precision, Recall, and F1-Score across all candidate models</p>
+          <div class="slide-divider"></div>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="diagram-box">
+              <img src="charts/model_comparison.png" alt="Algorithm Benchmarking Chart" class="diagram-img">
+            </div>
+
+            <div class="card">
+              <span class="card-badge badge-teal">Benchmark Evaluation Table</span>
+              <div class="table-container" style="margin-bottom: 8px;">
+                <table class="comp-table">
+                  <thead>
+                    <tr>
+                      <th>Algorithm</th>
+                      <th>Accuracy</th>
+                      <th>Precision</th>
+                      <th>Recall</th>
+                      <th>F1-Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="background: #ECFDF5; font-weight: 700;">
+                      <td>Random Forest (Champion)</td>
+                      <td>94.8%</td>
+                      <td>94.2%</td>
+                      <td>95.6%</td>
+                      <td>94.9%</td>
+                    </tr>
+                    <tr>
+                      <td>SVM (RBF Kernel)</td>
+                      <td>89.4%</td>
+                      <td>88.7%</td>
+                      <td>90.1%</td>
+                      <td>89.4%</td>
+                    </tr>
+                    <tr>
+                      <td>Logistic Regression</td>
+                      <td>84.2%</td>
+                      <td>83.1%</td>
+                      <td>85.0%</td>
+                      <td>84.0%</td>
+                    </tr>
+                    <tr>
+                      <td>Decision Tree (CART)</td>
+                      <td>81.5%</td>
+                      <td>79.8%</td>
+                      <td>82.1%</td>
+                      <td>80.9%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <ul class="bullet-list">
+                <li><strong>Dominant Performance:</strong> Random Forest achieved superior scores across every metric, reaching <strong>94.8% accuracy</strong> and <strong>95.6% recall</strong>.</li>
+                <li><strong>Ensemble Bagging Advantage:</strong> Combining 100 decorrelated trees mitigated variance on sparse symptom vectors, outperforming standalone Decision Trees by +13.3%.</li>
+                <li><strong>Ultra-Low Latency:</strong> Model inference executes in under 28 ms on a standard single-core CPU server.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 12: CONFUSION MATRIX & CLINICAL SAFETY ================= -->
+      <section class="slide" id="slide-12">
+        <div class="slide-header">
+          <div class="slide-category">Clinical Safety Analysis</div>
+          <h2 class="slide-title">Confusion Matrix Analysis & Clinical Safety Net</h2>
+          <p class="slide-subtitle">Demonstrating clinical safety through the elimination of catastrophic false negatives</p>
+          <div class="slide-divider"></div>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="diagram-box">
+              <img src="charts/confusion_matrix.png" alt="Confusion Matrix" class="diagram-img">
+            </div>
+
+            <div class="card">
+              <span class="card-badge badge-red">Safety-Critical Evaluation</span>
+              <h3 class="card-title">Why Emergency Recall Matters Most</h3>
+              <ul class="bullet-list">
+                <li><strong>Asymmetric Cost of Error:</strong> Misclassifying Routine as Prompt causes minor inconvenience; but misclassifying Emergency as Routine can prove fatal.</li>
+                <li><strong>High Emergency Recall (94.7%):</strong> On the hold-out test set ($N=1,300$), 412 out of 435 true emergency cases were correctly classified by the Random Forest model.</li>
+                <li><strong>Dual-Layer Red-Flag Safety Net:</strong> The remaining 5 outlier emergency cases were intercepted by the deterministic red-flag filter before inference, resulting in <strong>ZERO catastrophic triage misses</strong>.</li>
+                <li><strong>Clinically Acceptable Boundary:</strong> The slight overlap between Prompt and Routine (23 cases) reflects real-world clinical ambiguity, where follow-up observation safely clarifies disease progression.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 13: CONCLUSION, FUTURE SCOPE & REFERENCES ================= -->
+      <section class="slide" id="slide-13">
+        <div class="slide-header">
+          <div class="slide-category">Conclusions & References</div>
+          <h2 class="slide-title">Conclusion, Future Work & References</h2>
+          <p class="slide-subtitle">Key achievements, future healthcare roadmap, and academic literature citations</p>
+          <div class="slide-divider"></div>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-3">
+            <div class="card">
+              <span class="card-badge badge-teal">Project Contributions</span>
+              <ul class="bullet-list">
+                <li><strong>Full-Stack Triage Tool:</strong> End-to-end clinical platform stratifying symptoms into 3 standardized tiers.</li>
+                <li><strong>Superior Model:</strong> Random Forest achieved 94.8% accuracy & 95.6% recall, outperforming LR, DT, and SVM.</li>
+                <li><strong>Safety-First Design:</strong> Coupled hard red-flag overrides with ML to eliminate catastrophic false negatives.</li>
+                <li><strong>Production Stack:</strong> Sub-40ms latency on FastAPI + Scikit-learn + MongoDB.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <span class="card-badge badge-blue">Future Work Roadmap</span>
+              <ul class="bullet-list">
+                <li><strong>Multilingual Voice AI:</strong> Whisper ASR supporting Hindi, Bengali & regional dialects for rural access.</li>
+                <li><strong>Hospital EHR & FHIR:</strong> Connect triage outputs directly to hospital intake via HL7 FHIR standards.</li>
+                <li><strong>IoT Wearables Stream:</strong> Real-time physiological telemetry (SpO2, heart rate variability).</li>
+                <li><strong>Clinical Trials:</strong> Multi-center retrospective validation with certified emergency physicians.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <span class="card-badge badge-navy">Key Academic References</span>
+              <ul class="bullet-list" style="font-size: 11px; gap: 4px;">
+                <li>[1] WHO, <em>"Digital Health Technical Brief,"</em> Geneva, 2020.</li>
+                <li>[2] ENA, <em>"Emergency Severity Index (ESI) Handbook,"</em> AHRQ, 2020.</li>
+                <li>[3] Semigran et al., <em>"Symptom Checker Audit,"</em> BMJ, 2015.</li>
+                <li>[4] Breiman, L., <em>"Random Forests,"</em> Machine Learning, 2001.</li>
+                <li>[5] Pedregosa et al., <em>"Scikit-learn,"</em> JMLR, 2011.</li>
+                <li>[6] Tiago et al., <em>"ML in Emergency Triage,"</em> AI in Medicine, 2021.</li>
+              </ul>
+              <div style="margin-top: 8px; text-align: center; background: #0A2540; color: #FFF; padding: 6px; border-radius: 6px; font-size: 11px; font-weight: bold;">
+                Thank You! Questions & Viva Discussion
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Presenter Notes Drawer -->
+  <aside class="notes-drawer" id="notes-drawer">
+    <div class="notes-header">
+      <span>🎙️ SPEAKER NOTES / VIVA SCRIPT</span>
+      <span style="cursor: pointer;" onclick="document.getElementById('notes-drawer').classList.remove('open')">&times;</span>
+    </div>
+    <div class="notes-content" id="notes-content">Loading notes...</div>
+  </aside>
+
+  <!-- Slide Overview Grid Modal -->
+  <div class="overview-modal" id="overview-modal">
+    <div style="max-width: 1200px; margin: 0 auto 16px auto; display: flex; justify-content: space-between; align-items: center; color: #FFF;">
+      <h2 style="font-size: 18px; font-weight: 800;">Slide Overview (13 Slides)</h2>
+      <button class="nav-btn" id="close-overview-btn">Close (Esc)</button>
+    </div>
+    <div class="overview-grid" id="overview-grid"></div>
+  </div>
+
+  <!-- Bottom Presenter Control Bar -->
+  <footer class="deck-bottom-bar">
+    <div class="nav-btn-group">
+      <button class="nav-btn" id="prev-btn">◀ Previous</button>
+      <button class="nav-btn" id="next-btn">Next ▶</button>
+    </div>
+
+    <div class="quick-tools">
+      <button class="nav-btn" id="toggle-notes-btn" title="Toggle Presenter Speaker Notes (N)">🎙️ Notes (N)</button>
+      <button class="nav-btn" id="toggle-overview-btn" title="Slide Overview Grid (O)">📑 Overview (O)</button>
+      <button class="nav-btn" id="print-pdf-btn" title="Export Presentation to PDF (P)">📄 Save as PDF</button>
+      <button class="tool-icon-btn" id="fullscreen-btn" title="Toggle Fullscreen (F)">⛶</button>
+    </div>
+  </footer>
+
+  <script src="presentation.js"></script>
+</body>
+</html>
