@@ -27,7 +27,8 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon',
   '.pdf': 'application/pdf',
   '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-  '.txt': 'text/plain; charset=utf-8'
+  '.txt': 'text/plain; charset=utf-8',
+  '.mp4': 'video/mp4'
 };
 
 const server = http.createServer((req, res) => {
@@ -47,7 +48,9 @@ const server = http.createServer((req, res) => {
 
   // Default to index.html
   if (pathname === '/' || pathname === '') {
-    pathname = '/index.html';
+    pathname = '/landing.html';
+  } else if (pathname === '/home' || pathname === '/dashboard') {
+    pathname = '/dashboard.html';
   }
 
   // Optional reverse proxy for /api to avoid any CORS complications
@@ -82,7 +85,7 @@ const server = http.createServer((req, res) => {
 
   // Resolve file path safely
   let filePath = path.join(ROOT_DIR, pathname);
-  
+
   // Prevent directory traversal
   if (!filePath.startsWith(ROOT_DIR)) {
     res.writeHead(403, { 'Content-Type': 'text/plain' });
@@ -99,11 +102,27 @@ const server = http.createServer((req, res) => {
     const ext = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
 
-    fs.readFile(filePath, (readErr, content) => {
+    const isText = ['.html', '.css', '.js', '.json', '.txt'].includes(ext);
+    const readEncoding = isText ? 'utf8' : null;
+
+    fs.readFile(filePath, readEncoding, (readErr, content) => {
       if (readErr) {
         res.writeHead(500, { 'Content-Type': 'text/plain' });
         res.end('500 Internal Server Error');
         return;
+      }
+
+      if (ext === '.html') {
+        try {
+          const env = fs.readFileSync(path.join(ROOT_DIR, '.env'), 'utf-8');
+          const publishableKeyLine = env.split('\n').find(line => line.startsWith('CLERK_PUBLISHABLE_KEY='));
+          if (publishableKeyLine) {
+            const publishableKey = publishableKeyLine.split('=')[1].trim();
+            content = content.replace(/__CLERK_PUBLISHABLE_KEY__/g, publishableKey);
+          }
+        } catch (e) {
+          console.warn("Could not load or inject CLERK_PUBLISHABLE_KEY", e);
+        }
       }
 
       res.writeHead(200, {

@@ -1,18 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Clinical Triage AI - Autonomous Clinical Symptom Triage & Risk Prediction Platform">
   <title>Clinical Triage AI | Preliminary Symptom Assessment Prototype</title>
-  
+
   <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
   <link rel="stylesheet" href="app.css">
+  
+  <script
+    async
+    crossorigin="anonymous"
+    data-clerk-publishable-key="__CLERK_PUBLISHABLE_KEY__"
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+    type="text/javascript"
+  ></script>
+  <script>
+    window.addEventListener('load', async function () {
+      if (!window.Clerk) return;
+      await window.Clerk.load();
+      
+      const loginBtn = document.getElementById('auth-login-btn');
+      const userBtnMount = document.getElementById('user-button-mount');
+      const startBtn = document.getElementById('header-start-btn');
+
+      if (window.Clerk.user) {
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (userBtnMount) {
+          userBtnMount.style.display = 'inline-block';
+          window.Clerk.mountUserButton(userBtnMount);
+        }
+        if (startBtn) startBtn.textContent = 'Dashboard';
+
+        const path = window.location.pathname;
+        if (path === '/home' || path === '/dashboard') {
+           setTimeout(() => window.showScreen && window.showScreen('symptoms'), 100);
+        }
+      } else {
+        if (loginBtn) {
+          loginBtn.style.display = 'inline-block';
+          loginBtn.onclick = () => window.Clerk.openSignIn({
+             afterSignInUrl: '/home',
+             afterSignUpUrl: '/home'
+          });
+        }
+        
+        const path = window.location.pathname;
+        if (path === '/home' || path === '/dashboard') {
+           window.Clerk.openSignIn({
+             afterSignInUrl: '/home',
+             afterSignUpUrl: '/home'
+           });
+        }
+      }
+
+      // Intercept protected links
+      const protectedScreens = ['symptoms', 'history']; 
+      document.querySelectorAll('[data-screen]').forEach(link => {
+         const screen = link.getAttribute('data-screen');
+         if (protectedScreens.includes(screen)) {
+           link.addEventListener('click', (e) => {
+             if (!window.Clerk.user) {
+               e.preventDefault();
+               e.stopPropagation();
+               window.Clerk.openSignIn({
+                 afterSignInUrl: '/home',
+                 afterSignUpUrl: '/home'
+               });
+             }
+           }, true);
+         }
+      });
+
+      ['header-start-btn', 'hero-start-btn'].forEach(id => {
+         const btn = document.getElementById(id);
+         if (btn) {
+           btn.addEventListener('click', (e) => {
+             if (!window.Clerk.user) {
+               e.preventDefault();
+               e.stopPropagation();
+               window.Clerk.openSignIn({
+                 afterSignInUrl: '/home',
+                 afterSignUpUrl: '/home'
+               });
+             } else {
+               if (id === 'header-start-btn') {
+                 window.showScreen && window.showScreen('symptoms');
+               }
+             }
+           }, true);
+         }
+      });
+    });
+  </script>
 </head>
+
 <body>
 
   <!-- Top Sticky Navigation Header -->
@@ -25,7 +115,6 @@
         <div class="brand-info">
           <div class="brand-name">
             Clinical Triage AI
-            <span class="brand-pill">CDSS PROTOCOL • v1.0</span>
           </div>
         </div>
       </a>
@@ -35,15 +124,15 @@
         <a href="#landing" class="nav-link active" data-screen="landing">Home</a>
         <a href="#assessment" class="nav-link" data-screen="symptoms">Assessment</a>
         <a href="#history" class="nav-link" data-screen="history">History</a>
-        <a href="#how-it-works" class="nav-link" data-screen="how-it-works">How It Works</a>
         <a href="#about" class="nav-link" data-screen="about">About</a>
       </nav>
 
       <!-- Action Buttons & Presentation Link -->
       <div class="header-actions">
-        <a href="presentation.html" target="_blank" class="deck-link-btn" title="Open 13-Slide Presentation Deck">
-          <span>📊 Defense Deck</span>
-        </a>
+        <button class="btn btn-outline btn-sm" id="auth-login-btn" style="display: none; margin-right: 12px; background: white; border: 1px solid #E2E8F0; color: #0F172A; border-radius: 8px; padding: 8px 16px; font-weight: 600; cursor: pointer; height: 36px;">
+          Log In / Sign Up
+        </button>
+        <div id="user-button-mount" style="display: none; margin-right: 12px; height: 36px; align-items: center;"></div>
         <button class="btn btn-primary btn-sm" id="header-start-btn">
           Start Assessment →
         </button>
@@ -54,19 +143,7 @@
     </div>
   </header>
 
-  <!-- Sub-Header Clinical Ticker Bar -->
-  <aside class="academic-ticker-bar">
-    <div class="container ticker-content">
-      <div class="ticker-left">
-        <span class="ticker-indicator"></span>
-        <span><strong>Autonomous System:</strong> AI-assisted preliminary triage — not a medical diagnosis.</span>
-      </div>
-      <div class="ticker-right">
-        <span>Dual-Layer Clinical Decision Intelligence • Latency &lt; 2ms</span>
-        <button class="ticker-link" id="open-tech-view-ticker-btn">Demo / Technical View</button>
-      </div>
-    </div>
-  </aside>
+
 
   <!-- Main Application Body -->
   <main class="site-main" id="site-main-content">
@@ -84,7 +161,8 @@
             Understand your symptoms.<br>Know what to do next.
           </h1>
           <p class="hero-subtitle">
-            Answer a few questions about what you're experiencing and receive a preliminary AI-assisted assessment of urgency.
+            Answer a few questions about what you're experiencing and receive a preliminary AI-assisted assessment of
+            urgency.
           </p>
 
           <div class="hero-cta-group">
@@ -101,7 +179,8 @@
             <div class="demo-preset-info">
               <span class="demo-preset-badge">EVALUATION SCENARIO</span>
               <div class="demo-preset-title">Demo Case: Fever + Headache (2 days, Moderate)</div>
-              <div class="demo-preset-desc">One-click test scenario for professors and judges to inspect the full assessment flow.</div>
+              <div class="demo-preset-desc">One-click test scenario for professors and judges to inspect the full
+                assessment flow.</div>
             </div>
             <button class="btn btn-emerald btn-sm" id="load-demo-case-btn">
               Load Demo Case →
@@ -114,21 +193,24 @@
               <div class="pillar-icon-box">💬</div>
               <h2 class="pillar-title">Humanized Guidance</h2>
               <p class="pillar-desc">
-                Designed to reassure rather than interrogate. Clear questions, compassionate language, and respectful progression.
+                Designed to reassure rather than interrogate. Clear questions, compassionate language, and respectful
+                progression.
               </p>
             </div>
             <div class="pillar-card">
               <div class="pillar-icon-box">🛡️</div>
               <h2 class="pillar-title">Explainable Triage</h2>
               <p class="pillar-desc">
-                Clear reasoning behind every recommendation. Transparent rule-checking paired with machine learning risk stratification.
+                Clear reasoning behind every recommendation. Transparent rule-checking paired with machine learning risk
+                stratification.
               </p>
             </div>
             <div class="pillar-card">
               <div class="pillar-icon-box">🔒</div>
               <h2 class="pillar-title">Safe & Non-Diagnostic</h2>
               <p class="pillar-desc">
-                Explicitly avoids dangerous disease claims or prescriptions. Focused solely on assessing clinical urgency and next steps.
+                Explicitly avoids dangerous disease claims or prescriptions. Focused solely on assessing clinical
+                urgency and next steps.
               </p>
             </div>
           </div>
@@ -137,7 +219,9 @@
           <div class="safety-statement-box">
             <span class="safety-icon">ℹ️</span>
             <div>
-              <strong>Important Safety Notice:</strong> This tool does not diagnose medical conditions or replace professional medical advice. If you are experiencing severe chest pain, sudden numbness, or shortness of breath, please contact emergency medical services immediately.
+              <strong>Important Safety Notice:</strong> This tool does not diagnose medical conditions or replace
+              professional medical advice. If you are experiencing severe chest pain, sudden numbness, or shortness of
+              breath, please contact emergency medical services immediately.
             </div>
           </div>
         </div>
@@ -148,13 +232,13 @@
          ASSESSMENT FLOW WRAPPER (SCREENS 2 - 5)
          ======================================================================= -->
     <div id="assessment-container" style="display: none;">
-      
+
       <!-- Stepper Progress Header -->
       <div class="container assessment-stepper-container">
         <div class="stepper-nav">
           <div class="stepper-line"></div>
           <div class="stepper-line-fill" id="stepper-progress-line"></div>
-          
+
           <div class="step-node active" id="step-node-1" data-step="1">
             <div class="step-circle">1</div>
             <span class="step-label">Symptoms</span>
@@ -200,7 +284,8 @@
             <!-- Search Bar -->
             <div class="symptom-search-bar">
               <span class="search-icon-pos">🔍</span>
-              <input type="text" id="symptom-search-input" class="search-input" placeholder="Search symptoms (e.g., fever, headache, cough)..." autocomplete="off">
+              <input type="text" id="symptom-search-input" class="search-input"
+                placeholder="Search symptoms (e.g., fever, headache, cough)..." autocomplete="off">
             </div>
 
             <!-- Category Filter Tabs -->
@@ -340,7 +425,8 @@
             <div class="form-grid-2col">
               <div class="field-group">
                 <label class="input-label" for="context-age">Age</label>
-                <input type="number" id="context-age" class="text-input" value="24" min="1" max="110" placeholder="e.g. 24">
+                <input type="number" id="context-age" class="text-input" value="24" min="1" max="110"
+                  placeholder="e.g. 24">
                 <span class="input-helper">Age assists in assessing demographic risk baselines.</span>
               </div>
               <div class="field-group">
@@ -376,13 +462,15 @@
               </div>
               <div class="field-group">
                 <label class="input-label" for="context-history">Recent Medical History (Optional)</label>
-                <input type="text" id="context-history" class="text-input" placeholder="e.g. Recent viral illness, surgery">
+                <input type="text" id="context-history" class="text-input"
+                  placeholder="e.g. Recent viral illness, surgery">
               </div>
             </div>
 
             <div class="field-group" style="margin-top: 16px;">
               <label class="input-label" for="context-notes">Optional Additional Notes</label>
-              <textarea id="context-notes" class="textarea-input" placeholder="Anything else you'd like our system to consider?"></textarea>
+              <textarea id="context-notes" class="textarea-input"
+                placeholder="Anything else you'd like our system to consider?"></textarea>
             </div>
 
             <!-- Navigation Buttons -->
@@ -524,7 +612,7 @@
          ======================================================================= -->
     <section class="screen-view" id="screen-result">
       <div class="container">
-        
+
         <!-- Result Header -->
         <div class="result-header-bar">
           <div>
@@ -544,7 +632,8 @@
         <!-- Emergency Alert Banner (Shown in High / Urgent cases) -->
         <div class="emergency-alert-banner" id="result-emergency-banner" style="display: none;">
           <div class="emergency-alert-text">
-            🚨 <strong>Potential Emergency Indicators Detected:</strong> Responses suggest severe or acute symptoms that require immediate clinical evaluation.
+            🚨 <strong>Potential Emergency Indicators Detected:</strong> Responses suggest severe or acute symptoms that
+            require immediate clinical evaluation.
           </div>
           <a href="tel:108" class="emergency-call-btn">
             📞 Call Emergency (108)
@@ -577,7 +666,7 @@
 
         <!-- Two Column Breakdown: Why & What This Means -->
         <div class="result-sections-grid">
-          
+
           <!-- WHY? -->
           <div class="content-block-card">
             <h2 class="block-card-title">
@@ -590,7 +679,8 @@
               </li>
               <li class="factor-item">
                 <span class="factor-bullet">▸</span>
-                <span>Combination of fever and headache represents a common systemic response warranting observation.</span>
+                <span>Combination of fever and headache represents a common systemic response warranting
+                  observation.</span>
               </li>
               <li class="factor-item">
                 <span class="factor-bullet">▸</span>
@@ -605,7 +695,9 @@
               <span>🩺</span> WHAT THIS MEANS
             </h2>
             <p class="what-means-text" id="result-meaning-text">
-              Based on the information you provided, your responses suggest that monitoring your symptoms and considering professional medical advice soon may be appropriate. While not an immediate emergency, persistent or worsening discomfort should be evaluated by a healthcare professional.
+              Based on the information you provided, your responses suggest that monitoring your symptoms and
+              considering professional medical advice soon may be appropriate. While not an immediate emergency,
+              persistent or worsening discomfort should be evaluated by a healthcare professional.
             </p>
           </div>
         </div>
@@ -627,7 +719,9 @@
             <div class="explain-node">TRIAGE CATEGORY</div>
           </div>
           <p class="explain-pipeline-desc">
-            The system maps your selected symptoms into a clinical feature vector, applies deterministic safety rules to catch critical red flags, and evaluates patterns through our prototype triage matrix to assign an objective urgency category. The assessment is an assistive recommendation and not a clinical diagnosis.
+            The system maps your selected symptoms into a clinical feature vector, applies deterministic safety rules to
+            catch critical red flags, and evaluates patterns through our prototype triage matrix to assign an objective
+            urgency category. The assessment is an assistive recommendation and not a clinical diagnosis.
           </p>
         </div>
 
@@ -656,7 +750,10 @@
         <div class="safety-statement-box" style="margin-bottom: 32px;">
           <span class="safety-icon">⚠️</span>
           <div>
-            <strong>Medical Disclaimer:</strong> This platform provides an AI-assisted preliminary assessment based only on the information entered by the user. It is not a medical diagnosis and should not replace advice from a qualified healthcare professional. If you are experiencing a medical emergency, seek professional emergency care immediately.
+            <strong>Medical Disclaimer:</strong> This platform provides an AI-assisted preliminary assessment based only
+            on the information entered by the user. It is not a medical diagnosis and should not replace advice from a
+            qualified healthcare professional. If you are experiencing a medical emergency, seek professional emergency
+            care immediately.
           </div>
         </div>
 
@@ -683,7 +780,8 @@
          ======================================================================= -->
     <section class="screen-view" id="screen-history">
       <div class="container">
-        <div class="form-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+        <div class="form-header"
+          style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
           <div>
             <h1 class="form-title">Your previous assessments</h1>
             <p class="form-subtitle">
@@ -704,7 +802,8 @@
         <div class="safety-statement-box" style="margin-bottom: 24px;">
           <span class="safety-icon">ℹ️</span>
           <div>
-            <strong>Demonstration Records:</strong> Sample records are displayed below to simulate ongoing longitudinal tracking. Newly completed assessments in this session are automatically saved here.
+            <strong>Demonstration Records:</strong> Sample records are displayed below to simulate ongoing longitudinal
+            tracking. Newly completed assessments in this session are automatically saved here.
           </div>
         </div>
 
@@ -723,7 +822,8 @@
         <div class="form-header" style="text-align: center; max-width: 680px; margin: 0 auto 36px auto;">
           <h1 class="form-title">How Clinical Triage AI Works</h1>
           <p class="form-subtitle">
-            A step-by-step overview of how user inputs are processed from initial intake to clear, actionable triage guidance.
+            A step-by-step overview of how user inputs are processed from initial intake to clear, actionable triage
+            guidance.
           </p>
         </div>
 
@@ -732,7 +832,8 @@
           <div class="how-step-card">
             <div class="step-num-tag">STEP 01</div>
             <h2 class="how-step-title">Tell us what you're experiencing</h2>
-            <p class="how-step-desc">Select symptoms from an intuitive, searchable catalog across all anatomical systems.</p>
+            <p class="how-step-desc">Select symptoms from an intuitive, searchable catalog across all anatomical
+              systems.</p>
           </div>
           <div class="how-step-card">
             <div class="step-num-tag">STEP 02</div>
@@ -747,7 +848,8 @@
           <div class="how-step-card">
             <div class="step-num-tag">STEP 04</div>
             <h2 class="how-step-title">System estimates risk</h2>
-            <p class="how-step-desc">Calibrates preliminary urgency (Low, Moderate, High) with complete explainability.</p>
+            <p class="how-step-desc">Calibrates preliminary urgency (Low, Moderate, High) with complete explainability.
+            </p>
           </div>
           <div class="how-step-card">
             <div class="step-num-tag">STEP 05</div>
@@ -760,7 +862,8 @@
         <div class="arch-block-card">
           <h2 class="block-card-title">Technical Architecture Pipeline</h2>
           <p style="font-size: 0.9rem; color: var(--color-grey);">
-            End-to-end dataflow illustrating user interaction through feature extraction, machine learning classification, and clinical guidance:
+            End-to-end dataflow illustrating user interaction through feature extraction, machine learning
+            classification, and clinical guidance:
           </p>
           <div class="arch-flow-diagram">
             <div class="arch-node">USER</div>
@@ -785,9 +888,10 @@
         <div class="models-table-card">
           <h2 class="block-card-title">Candidate Machine Learning Models</h2>
           <p style="font-size: 0.9rem; color: var(--color-grey-dark); line-height: 1.5;">
-            Our research evaluates four distinct classification architectures against held-out clinical validation sets. Final model selection will be based on rigorous multi-metric validation performance:
+            Our research evaluates four distinct classification architectures against held-out clinical validation sets.
+            Final model selection will be based on rigorous multi-metric validation performance:
           </p>
-          
+
           <table class="standard-table">
             <thead>
               <tr>
@@ -838,7 +942,8 @@
             </tbody>
           </table>
           <p style="font-size: 0.8rem; color: var(--color-grey); margin-top: 14px;">
-            * Evaluation based on 1,300 held-out patient cases from benchmark validation cohorts. Final deployment model selection will be confirmed upon prospective clinical validation.
+            * Evaluation based on 1,300 held-out patient cases from benchmark validation cohorts. Final deployment model
+            selection will be confirmed upon prospective clinical validation.
           </p>
         </div>
 
@@ -856,7 +961,7 @@
          ======================================================================= -->
     <section class="screen-view" id="screen-about">
       <div class="container">
-        
+
         <!-- Product Overview Card -->
         <div class="academic-card">
           <span class="demo-preset-badge">INNOVATION PLATFORM</span>
@@ -864,7 +969,9 @@
             Clinical Triage AI — Autonomous Clinical Decision Support System
           </h1>
           <p style="font-size: 1rem; color: var(--color-grey-dark); max-width: 720px; line-height: 1.6;">
-            A next-generation digital healthcare intelligence platform designed to eliminate emergency room bottlenecks and streamline triage intake. The system pairs deterministic safety guardrails with an ensemble Random Forest classifier to provide objective, explainable urgency categorization in under 15ms.
+            A next-generation digital healthcare intelligence platform designed to eliminate emergency room bottlenecks
+            and streamline triage intake. The system pairs deterministic safety guardrails with an ensemble Random
+            Forest classifier to provide objective, explainable urgency categorization in under 15ms.
           </p>
 
           <h2 style="font-size: 1.1rem; font-weight: 700; color: var(--color-black); margin-top: 28px;">
@@ -874,17 +981,20 @@
             <div class="author-box">
               <div class="author-name">Layer 1: Deterministic Safety Guardrail</div>
               <div class="author-roll">Instant Override (&lt; 0.5ms)</div>
-              <div class="author-dept">Hardcoded clinical red-flag logic that intercepts critical acute cardiac, respiratory, and neurological emergencies with zero fatal false negatives.</div>
+              <div class="author-dept">Hardcoded clinical red-flag logic that intercepts critical acute cardiac,
+                respiratory, and neurological emergencies with zero fatal false negatives.</div>
             </div>
             <div class="author-box">
               <div class="author-name">Layer 2: Multi-Factor Predictive Matrix</div>
               <div class="author-roll">Champion Accuracy: 94.8% • Recall: 95.6%</div>
-              <div class="author-dept">Calibrated probability distribution across 41 conditions and 132 symptom vectors, providing actionable routine, prompt, or urgent clinical guidance.</div>
+              <div class="author-dept">Calibrated probability distribution across 41 conditions and 132 symptom vectors,
+                providing actionable routine, prompt, or urgent clinical guidance.</div>
             </div>
           </div>
 
           <!-- Presentation & Research Links -->
-          <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--color-border); display: flex; gap: 14px; flex-wrap: wrap;">
+          <div
+            style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--color-border); display: flex; gap: 14px; flex-wrap: wrap;">
             <a href="presentation.html" target="_blank" class="btn btn-secondary">
               📊 13-Slide Presentation Deck
             </a>
@@ -915,7 +1025,8 @@
       </div>
       <div class="modal-body">
         <div style="font-size: 0.88rem; color: var(--color-grey-dark); margin-bottom: 16px;">
-          This inspector panel reveals the internal feature representation, safety checks, and prediction engine logic for judges and faculty evaluators:
+          This inspector panel reveals the internal feature representation, safety checks, and prediction engine logic
+          for judges and faculty evaluators:
         </div>
 
         <div style="display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap;">
@@ -943,7 +1054,9 @@
 }</pre>
 
         <div style="margin-top: 18px; font-size: 0.84rem; color: var(--color-grey); line-height: 1.5;">
-          <strong>Architecture Note:</strong> The platform isolates `predictRisk(input)` inside a dedicated prototype prediction service. It checks Layer 1 deterministic safety rules first (e.g. chest pain with breathlessness $\to$ immediate Urgent override), followed by weighted matrix evaluation.
+          <strong>Architecture Note:</strong> The platform isolates `predictRisk(input)` inside a dedicated prototype
+          prediction service. It checks Layer 1 deterministic safety rules first (e.g. chest pain with breathlessness
+          $\to$ immediate Urgent override), followed by weighted matrix evaluation.
         </div>
       </div>
     </div>
@@ -961,11 +1074,15 @@
         <button class="modal-close-btn" id="close-report-modal-btn">✕</button>
       </div>
       <div class="modal-body">
-        <div style="border: 1px solid var(--color-border); padding: 24px; border-radius: var(--radius-md);" id="printable-record-content">
-          <div style="display: flex; justify-content: space-between; border-bottom: 2px solid var(--color-black); padding-bottom: 12px; margin-bottom: 16px;">
+        <div style="border: 1px solid var(--color-border); padding: 24px; border-radius: var(--radius-md);"
+          id="printable-record-content">
+          <div
+            style="display: flex; justify-content: space-between; border-bottom: 2px solid var(--color-black); padding-bottom: 12px; margin-bottom: 16px;">
             <div>
-              <h2 style="font-size: 1.2rem; font-weight: 800; color: var(--color-black);">CLINICAL TRIAGE AI — INTAKE NOTE</h2>
-              <div style="font-size: 0.8rem; color: var(--color-grey);">Clinical Decision Support System (CDSS) • Triage Protocol v1.0</div>
+              <h2 style="font-size: 1.2rem; font-weight: 800; color: var(--color-black);">CLINICAL TRIAGE AI — INTAKE
+                NOTE</h2>
+              <div style="font-size: 0.8rem; color: var(--color-grey);">Clinical Decision Support System (CDSS) • Triage
+                Protocol v1.0</div>
             </div>
             <div style="text-align: right; font-size: 0.8rem; color: var(--color-grey);">
               <div>Autonomous Intake Protocol</div>
@@ -973,20 +1090,26 @@
             </div>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.86rem; margin-bottom: 16px;">
+          <div
+            style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.86rem; margin-bottom: 16px;">
             <div><strong>Patient Demographics:</strong> <span id="report-demo-str">24 yrs • Male</span></div>
-            <div><strong>Assessment Urgency:</strong> <span id="report-triage-str" style="font-weight: 700; color: var(--color-black);">PROMPT</span></div>
+            <div><strong>Assessment Urgency:</strong> <span id="report-triage-str"
+                style="font-weight: 700; color: var(--color-black);">PROMPT</span></div>
             <div><strong>Reported Symptoms:</strong> <span id="report-symptoms-str">Fever, Headache</span></div>
-            <div><strong>Severity & Progression:</strong> <span id="report-details-str">Moderate • 1–3 days • Steady</span></div>
+            <div><strong>Severity & Progression:</strong> <span id="report-details-str">Moderate • 1–3 days •
+                Steady</span></div>
           </div>
 
           <div style="font-size: 0.84rem; color: var(--color-grey-dark); margin-bottom: 16px;">
             <strong>System Findings & Explanation:</strong><br>
-            <span id="report-explanation-str">Responses indicate moderate symptom severity. Recommended for prompt clinical evaluation within 24–48 hours.</span>
+            <span id="report-explanation-str">Responses indicate moderate symptom severity. Recommended for prompt
+              clinical evaluation within 24–48 hours.</span>
           </div>
 
-          <div style="border-top: 1px solid var(--color-border); padding-top: 12px; font-size: 0.76rem; color: var(--color-grey); line-height: 1.4;">
-            <strong>DISCLAIMER:</strong> This document represents an AI-assisted preliminary assessment prototype. It does not constitute a definitive medical diagnosis, prescription, or clinical certification.
+          <div
+            style="border-top: 1px solid var(--color-border); padding-top: 12px; font-size: 0.76rem; color: var(--color-grey); line-height: 1.4;">
+            <strong>DISCLAIMER:</strong> This document represents an AI-assisted preliminary assessment prototype. It
+            does not constitute a definitive medical diagnosis, prescription, or clinical certification.
           </div>
         </div>
 
@@ -1013,7 +1136,10 @@
       </div>
 
       <div class="footer-disclaimer-box">
-        <strong>Important Medical Notice:</strong> This platform provides an AI-assisted preliminary assessment based only on the information entered by the user. It is not a medical diagnosis and should not replace advice from a qualified healthcare professional. <strong>IF YOU ARE EXPERIENCING A MEDICAL EMERGENCY, SEEK PROFESSIONAL EMERGENCY CARE IMMEDIATELY.</strong>
+        <strong>Important Medical Notice:</strong> This platform provides an AI-assisted preliminary assessment based
+        only on the information entered by the user. It is not a medical diagnosis and should not replace advice from a
+        qualified healthcare professional. <strong>IF YOU ARE EXPERIENCING A MEDICAL EMERGENCY, SEEK PROFESSIONAL
+          EMERGENCY CARE IMMEDIATELY.</strong>
       </div>
 
       <div class="footer-bottom">
@@ -1025,4 +1151,5 @@
 
   <script src="app.js"></script>
 </body>
+
 </html>
