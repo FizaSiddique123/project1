@@ -613,53 +613,6 @@ def predict_triage(request: TriageRequest):
 def get_history():
     return {"success": True, "records": HISTORY_LOGS}
 
-# ---------------------------------------------------------------------------
-# Mount Static Files (charts, slides, pdfs, presentation deck)
-# ---------------------------------------------------------------------------
-cwd = os.path.dirname(os.path.abspath(__file__))
-charts_dir = os.path.join(cwd, "charts")
-if os.path.exists(charts_dir):
-    app.mount("/charts", StaticFiles(directory=charts_dir), name="charts")
-
-slides_dir = os.path.join(cwd, "slides_preview")
-if os.path.exists(slides_dir):
-    app.mount("/slides_preview", StaticFiles(directory=slides_dir), name="slides_preview")
-
-@app.get("/presentation.html")
-def get_presentation():
-    path = os.path.join(cwd, "presentation.html")
-    if os.path.exists(path):
-        return FileResponse(path)
-    return JSONResponse({"error": "Presentation not found"}, status_code=404)
-
-@app.get("/presentation.css")
-def get_presentation_css():
-    path = os.path.join(cwd, "presentation.css")
-    if os.path.exists(path):
-        return FileResponse(path, media_type="text/css")
-    return JSONResponse({"error": "CSS not found"}, status_code=404)
-
-@app.get("/presentation.js")
-def get_presentation_js():
-    path = os.path.join(cwd, "presentation.js")
-    if os.path.exists(path):
-        return FileResponse(path, media_type="application/javascript")
-    return JSONResponse({"error": "JS not found"}, status_code=404)
-
-@app.get("/AI_Clinical_Symptom_Triage_Presentation.pdf")
-def get_presentation_pdf():
-    path = os.path.join(cwd, "AI_Clinical_Symptom_Triage_Presentation.pdf")
-    if os.path.exists(path):
-        return FileResponse(path, media_type="application/pdf")
-    return JSONResponse({"error": "PDF not found"}, status_code=404)
-
-@app.get("/AI_Clinical_Symptom_Triage_Presentation.pptx")
-def get_presentation_pptx():
-    path = os.path.join(cwd, "AI_Clinical_Symptom_Triage_Presentation.pptx")
-    if os.path.exists(path):
-        return FileResponse(path, media_type="application/vnd.openxmlformats-officedocument.presentationml.presentation")
-    return JSONResponse({"error": "PPTX not found"}, status_code=404)
-
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("backend_server:app", host="127.0.0.1", port=8000, reload=False)

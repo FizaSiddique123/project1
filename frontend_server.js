@@ -25,8 +25,6 @@ const MIME_TYPES = {
   '.jpeg': 'image/jpeg',
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
-  '.pdf': 'application/pdf',
-  '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
   '.txt': 'text/plain; charset=utf-8',
   '.mp4': 'video/mp4'
 };
@@ -46,10 +44,10 @@ const server = http.createServer((req, res) => {
   const parsedUrl = url.parse(req.url);
   let pathname = decodeURIComponent(parsedUrl.pathname);
 
-  // Default to index.html
-  if (pathname === '/' || pathname === '') {
+  // Route mapping
+  if (pathname === '/' || pathname === '' || pathname === '/landing.html' || pathname === '/landing' || pathname === '/index.html') {
     pathname = '/landing.html';
-  } else if (pathname === '/home' || pathname === '/dashboard') {
+  } else if (pathname === '/home' || pathname === '/dashboard' || pathname === '/assessment' || pathname === '/assessment.html') {
     pathname = '/dashboard.html';
   }
 
@@ -95,8 +93,8 @@ const server = http.createServer((req, res) => {
 
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {
-      // If file not found, fallback to index.html for SPA client routing
-      filePath = path.join(ROOT_DIR, 'index.html');
+      // If file not found, fallback to landing.html for client routing
+      filePath = path.join(ROOT_DIR, 'landing.html');
     }
 
     const ext = path.extname(filePath).toLowerCase();

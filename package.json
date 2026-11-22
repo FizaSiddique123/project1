@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node frontend_server.js",
     "dev": "node frontend_server.js",
-    "backend": "python -m uvicorn backend_server:app --host 127.0.0.1 --port 8000"
+    "start:all": "python start_all.py",
+    "backend": "python -m uvicorn backend_server:app --host 127.0.0.1 --port 8000",
+    "test": "python test_predictions.py"
   },
   "keywords": [
     "clinical-triage",
